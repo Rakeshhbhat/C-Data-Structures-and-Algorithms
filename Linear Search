@@ -1,0 +1,27 @@
+#include<stdio.h>
+int main()
+{
+    int a[50],key,i,n;
+    printf("enter the number of elements \n");
+    scanf("%d",&n);
+    printf("enter %d elements \n",n);
+    for(i=0;i<n;i++)
+    {
+        scanf("%d",&a[i]);
+    }
+    printf("enter the key element to be searched ");
+    scanf("%d",&key);
+    for(i=0;i<n;i++)
+    {
+        if(a[i]==key)
+        {
+            printf("%d is present at location %d",key,(i+1));
+            break;
+        }
+    }
+    if(i==n)
+    {
+        printf("%d is not present",key);
+    }
+    return 0;
+}
