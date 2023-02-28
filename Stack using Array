@@ -7,7 +7,7 @@ void push(int item)
 {
     if(top==MAX-1)
     {
-        printf("underflow \n");
+        printf("overflow \n");
     }
     top++;
     a[top]=item;
