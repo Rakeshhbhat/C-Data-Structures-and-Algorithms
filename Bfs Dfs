@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <conio.h>
+
+int a[20][20], vbfs[20], vdfs[20], n;
+
+void bfs(int src)
+{
+    int i, j, q[20], f = 0, r = -1;
+    q[++r] = src;
+    vbfs[src] = 1;
+    while (f <= r)
+    {
+        i = q[f++];
+        printf("%d ", i);
+        for (j = 0; j < n; j++)
+            if (a[i][j] && !vbfs[j])
+            {
+                vbfs[j] = 1;
+                q[++r] = j;
+            }
+    }
+}
+
+void dfs(int src)
+{
+    int j;
+    printf("%d ", src);
+    vdfs[src] = 1;
+    for (j = 0; j < n; j++)
+        if (a[src][j] && !vdfs[j])
+            dfs(j);
+}
+
+void main()
+{
+    int i, j, src, ch;
+    printf("Enter no of nodes: ");
+    scanf("%d", &n);
+    printf("Enter graph in matrix form:\n");
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            scanf("%d", &a[i][j]);
+    printf("1.BFS\n2.DFS\n3.Exit\n");
+    do
+    {
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+        switch (ch)
+        {
+        case 1:
+            for (i = 0; i < n; i++)
+                vbfs[i] = 0;
+            printf("Enter source vertex: ");
+            scanf("%d", &src);
+            if (src < 0 || src >= n)
+                printf("Invalid vertex\n");
+            else
+            {
+                printf("Nodes reachable from %d:\n", src);
+                bfs(src);
+                printf("\n");
+            }
+            break;
+        case 2:
+            for (i = 0; i < n; i++)
+                vdfs[i] = 0;
+            printf("Enter source vertex: ");
+            scanf("%d", &src);
+            if (src < 0 || src >= n)
+                printf("Invalid vertex\n");
+            else
+            {
+                printf("Nodes reachable from %d:\n", src);
+                dfs(src);
+                printf("\n");
+            }
+            break;
+        case 3:
+            printf("Terminating program...\n");
+            break;
+        default:
+            printf("Invalid choice\n");
+        }
+    } while (ch != 3);
+    _getch();
+}
