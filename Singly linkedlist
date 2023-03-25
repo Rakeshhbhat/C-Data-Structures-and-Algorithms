@@ -1,0 +1,215 @@
+#include<stdio.h> //input output
+#include<stdlib.h> //malloc fn.
+struct node {
+    int data;
+    struct node *link;
+};
+
+void count(struct node *head) {
+    struct node *ptr = head;
+    int count = 0;
+    if(head == NULL) {
+        printf("Linked list is empty. \n");
+    }
+    else {
+        while(ptr!=NULL) {
+            count++;
+            ptr=ptr->link;
+        }
+    }
+    printf("%d \n",count);
+}
+    
+void print_data(struct node *head) {
+    struct node *ptr = head;
+    if(ptr == NULL) {
+        printf("Linked list is empty. \n");
+    }
+    else {
+        while(ptr!=NULL) {
+            printf("%d \n",ptr->data);
+            ptr=ptr->link;
+        }
+    }
+}
+
+void add_at_end(struct node *head, int data) {
+    struct node *ptr, *temp;
+    ptr = head;
+    temp = (struct node*)malloc(sizeof(struct node));
+    temp->data = data;
+    temp->link = NULL;
+    while(ptr->link!=NULL) {
+        ptr=ptr->link;
+    }
+    ptr->link = temp;
+    
+}
+
+struct node *add_at_beg(struct node *head,int data) {
+    struct node *ptr = malloc(sizeof(struct node));
+    ptr->data = data;
+    ptr->link = NULL;
+    
+    ptr->link = head;
+    head = ptr;
+    return head;
+}
+
+void add_beg(struct node **head, int data) {
+    struct node *temp = malloc(sizeof(struct node));
+    temp->data = data;
+    temp->link = *head;
+    *head = temp;
+}
+
+void add_at_pos(struct node *head,int data,int pos) {
+    struct node *ptr = head;
+    struct node *ptr2 = malloc(sizeof(struct node));
+    ptr2->data = data;
+    ptr2->link = NULL;
+    pos--;
+    while(pos!=1) {
+        ptr = ptr->link;
+        pos--;
+    }
+    ptr2->link = ptr->link;
+    ptr->link = ptr2;
+}
+
+struct node *del_first(struct node *head) {
+    if(head == NULL) {
+        printf("Linked List is empty \n");
+    }
+    else {
+        struct node *ptr = head;
+        head = head->link;
+        free(ptr);
+    }
+    return head;
+    }
+
+struct node *del_last(struct node *head) {
+    if(head == NULL) {
+        printf("Linked list is empty. \n");
+    }
+    else if(head->link == NULL) {
+        free(head);
+        head = NULL;
+    }
+    else {
+    struct node *temp = head;
+    struct node *temp2 = head;
+    while(temp->link!=NULL) {
+        temp2 = temp;
+        temp = temp->link;
+    }
+    temp2->link = NULL;
+    free(temp);
+    temp = NULL;
+    }
+    return head;
+}
+
+void del_pos(struct node **head, int pos) {
+    struct node *previous = *head;
+    struct node *current = *head;
+    if(*head == NULL) { //if main fn head is null or not
+        printf("Linked list is empty. \n");
+    }
+    else if(pos == 1) {
+        *head = current->link; 
+        free(current);
+        current = NULL;
+    }
+    else {
+        while(pos!=1) {
+            previous = current;
+            current = current->link;
+            pos--;
+        }
+        previous->link = current->link;
+        free(current);
+        current = NULL;
+    }
+}
+
+struct node *del(struct node *head) {
+    struct node *temp = head;
+    while(temp!=NULL) {
+        temp = temp->link;
+        free(head);
+        head=temp;
+    }
+    return head;
+}
+
+struct node *reverse(struct node *head) {
+    struct node *prev = NULL;
+    struct node *next = NULL;
+    while(head!=NULL) {
+        next = head->link;
+        head->link = prev;
+        prev = head;
+        head = next;
+    }
+    head = prev;
+    return head;
+}
+
+int main() {
+    struct node *head = NULL;
+    head = (struct node *)malloc(sizeof(struct node)); //type casting not needed
+    head->data = 45;
+    
+    struct node *current = malloc(sizeof(struct node));
+    current->data = 90;
+    current->link = NULL;
+    head->link = current;
+    
+    current = malloc(sizeof(struct node));
+    current->data = 105;
+    current->link = NULL;
+    head->link->link = current;
+    
+    printf("Count = ");
+    count(head);
+    add_at_end(head,125);
+    head = add_at_beg(head,165); //possible mistake add_beg(&head, data) if dont want to return head
+    add_beg(&head, 200);
+    add_at_pos(head,365,3);
+    printf("Before deleting \n");
+    print_data(head);
+    printf("After deleting \n");
+    head = del_first(head);
+    head = del_last(head);
+    del_pos(&head,2);
+    printf("Reverse \n");
+    head = reverse(head);
+   
+    
+    struct node *ptr; 
+    ptr = head;
+    while(ptr!=NULL) {
+        printf("%d \n",ptr->data);
+        ptr = ptr->link;
+    }
+    
+     head = del(head);
+    if(head==NULL)
+     printf("Fully deleted.\n");
+    
+ /*   printf("%d \n",head->data);
+    printf("%d",current->data);
+    return 0; */
+    
+    //ptr->link = temp; adding node at end of linked list
+    //delete last element O(n)
+    
+    /*using single pointer deleting
+    while(temp->link->link != NULL) {
+            temp = temp->link;
+    }
+    free(temp->link);
+    temp->link = NULL; */
+}
