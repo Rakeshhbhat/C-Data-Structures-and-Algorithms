@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MIN_HEAP_SIZE 100
+
+int heap[MIN_HEAP_SIZE];
+int size = 0;
+
+int parent(int i) {
+    return (i - 1) / 2;
+}
+
+int left_child(int i) {
+    return 2 * i + 1;
+}
+
+int right_child(int i) {
+    return 2 * i + 2;
+}
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void insert(int value) {
+    if (size >= MIN_HEAP_SIZE) {
+        printf("Heap is full. Cannot insert any more elements.\n");
+        return;
+    }
+    
+    heap[size] = value;
+    size++;
+    
+    int current = size - 1;
+    while (current > 0 && heap[current] < heap[parent(current)]) {
+        swap(&heap[current], &heap[parent(current)]);
+        current = parent(current);
+    }
+}
+
+void heapify(int i) {
+    int smallest = i;
+    int left = left_child(i);
+    int right = right_child(i);
+    
+    if (left < size && heap[left] < heap[smallest]) {
+        smallest = left;
+    }
+    
+    if (right < size && heap[right] < heap[smallest]) {
+        smallest = right;
+    }
+    
+    if (smallest != i) {
+        swap(&heap[i], &heap[smallest]);
+        heapify(smallest);
+    }
+}
+
+int extract_min() {
+    if (size == 0) {
+        printf("Heap is empty. Cannot extract any elements.\n");
+        return -1;
+    }
+    
+    int min = heap[0];
+    heap[0] = heap[size - 1];
+    size--;
+    heapify(0);
+    
+    return min;
+}
+
+int main() {
+    insert(10);
+    insert(20);
+    insert(15);
+    insert(30);
+    insert(40);
+    insert(25);
+    
+    printf("Extracted min: %d\n", extract_min());
+    printf("Extracted min: %d\n", extract_min());
+    printf("Extracted min: %d\n", extract_min());
+    
+    return 0;
+}
